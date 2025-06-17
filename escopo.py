@@ -34,27 +34,29 @@ while True:
             cpf_eleitor = int(input("Digite o seu CPF: "))
         except ValueError:
             print("CPF inválido. Digite apenas números.")
-            continue
+
 
         if cpf_eleitor not in eleitores:
             print("Eleitor não cadastrado. Não pode votar.\n" \
                   "Realize o pagamento da multa para ter seus direitos regularizados")
-            continue
 
-                if cpf in ja_votou:
-                    print("Voto já computado para este CPF.")
 
-            print("Eleitor localizado. Boa votação")
+        if cpf_eleitor in votos_computados:
+            print("Voto já computado para este CPF.")
+
+
+        nome_eleitor = eleitores[cpf_eleitor]
+        print(f"Eleitor {nome_eleitor} localizado. Boa votação!")
 
         print("\nCandidatos:")
         for nome_cand, info in candidatos.items():
             print(f"{nome_cand} - Número: {info["numero"]}")
 
         try:
-            voto = int(input("Digite o número do seu candidato (0 para NULO/BRANCO): "))
+            voto = int(input("Digite o número do seu candidato (0 para NULO): "))
         except ValueError:
             print("Voto inválido. Digite apenas números.")
-            continue
+
 
         votou = False
         for nome_cand, info in candidatos.items():
@@ -65,8 +67,8 @@ while True:
                 votos_computados.add(cpf_eleitor)
                 break
 
-            if not votou:
-                print("Número inválido. Voto não computado.")
+        if not votou:
+            print("Número inválido. Voto não computado.")
 
         sair = input("Deseja encerrar a votação? (s/n): ").lower()
         if sair == "s":
@@ -79,7 +81,7 @@ while True:
                 cpf_eleitor = int(input("Digite o CPF do eleitor: "))
             except ValueError:
                 print("CPF inválido. Digite apenas números.")
-                continue
+
 
             if cpf_eleitor in eleitores:
                 print("CPF já cadastrado.")
@@ -87,7 +89,7 @@ while True:
                 nome_eleitor = input("Digite o nome do eleitor: ").strip().capitalize()
                 if not nome_eleitor:
                     print("Nome do eleitor não pode ser vazio.")
-                    continue
+
                 eleitores[cpf_eleitor] = nome_eleitor
                 print("Eleitor cadastrado com sucesso!")
             
@@ -100,38 +102,37 @@ while True:
 
     elif opcao == 3:
         while True:
-            print("\n--- Realizar Novo Cadastro de Candidato ---")
-            nome_cand = input("Digite o nome do candidato: ").strip().capitalize()
-            if not nome_cand:
-                print("Nome do candidato não pode ser vazio.")
-                continue
-
-            try:
-                numero_cand = int(input("Digite o número do candidato: "))
-            except ValueError:
-                print("Número do candidato inválido. Digite apenas números.")
-                continue
+            print("Realizar Novo Cadastro de Candidato")
+            nome_cand = input("Digite o nome do candidato: ")
             
-            numero_existente = False
-            for cand_info in candidatos.values():
-                if numero_cand == cand_info["numero"]:
-                    numero_existente = True
-                    break
+            while True: 
+                try:
+                    numero_cand = int(input("Digite o número do candidato: "))
+                except ValueError:
+                    print("Número inválido. Digite apenas números.")
 
-            if numero_existente:
-                print(f"Número {numero_cand} já está em uso por outro candidato.")
-            elif nome_cand in candidatos:
+                numero_ja_cadastrado = False
+
+                for info in candidatos.values():
+                     if info["numero"] == numero_cand:
+                       numero_ja_cadastrado = True
+                       break
+
+                if numero_ja_cadastrado:
+                   print("Esse número de eleitor pertence a outro candidato, tente novamente.")
+                else:
+                 break
+            
+            if nome_cand in candidatos:
                 print(f"Candidato {nome_cand} já cadastrado.")
             else:
                 candidatos[nome_cand] = {"numero": numero_cand, "votos": 0}
                 print("Candidato cadastrado com sucesso!")
-            
-            continuar = input("Deseja cadastrar outro candidato? (s/n): ").lower()
-            if continuar == "n":
-                print("\nCandidatos Cadastrados:")
-                for nome_cand, info in candidatos.items():
-                    print(f"{nome_cand} - Número: {info["numero"]}")
+
+            if input("Deseja cadastrar outro Candidato?(s/n)") == "n":
                 break
+        for nome_cand, info in candidatos.items():
+            print(f"{nome_cand} - Número: {info['numero']}")
 
     elif opcao == 4:
         print("\n--- Resultado da Votação ---")
