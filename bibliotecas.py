@@ -1,7 +1,7 @@
 import pickle
 import plotly.graph_objects as go
 
-# Funções para salvar e carregar dados
+
 def salvar_dados():
     with open("dados_votacao.pkl", "wb") as f:
         pickle.dump({"eleitores": eleitores, "candidatos": candidatos, "votos_computados": votos_computados}, f)
@@ -9,14 +9,13 @@ def salvar_dados():
 def carregar_dados():
     global eleitores, candidatos, votos_computados
     try:
-        with open("dados_votacao.pkl", "rb") as f:
+        with open("dados_votacao.txt", "rb") as f:
             dados = pickle.load(f)
             eleitores = dados["eleitores"]
             candidatos = dados["candidatos"]
             votos_computados = dados["votos_computados"]
     except FileNotFoundError:
-        pass # Se o arquivo não existir, usa os dados iniciais
-
+        pass 
 eleitores = {
     11111111111: "Ana",
     22222222222: "Bruno",
@@ -29,9 +28,9 @@ candidatos = {
     "Nulo": {"numero": 0, "votos": 0}
 }
 
-votos_computados = set() 
+votos_computados = set()
 
-carregar_dados()
+carregar_dados() 
 
 print("Bem-vindo ao sistema de votação!")
 
@@ -74,7 +73,7 @@ while True:
             print(f"{nome_cand} - Número: {info['numero']}")
 
         try:
-            voto = int(input("Digite o número do seu candidato (0 para NULO/BRANCO): "))
+            voto = int(input("Digite o número do seu candidato (0 para NULO): "))
         except ValueError:
             print("Voto inválido. Digite apenas números.")
 
@@ -86,14 +85,14 @@ while True:
                 votou = True
                 print(f"Voto computado para {nome_cand}!")
                 votos_computados.add(cpf_eleitor)
-                salvar_dados()
+                salvar_dados() 
                 break
 
         if not votou:
             print("Número inválido. Voto não computado.")
 
-        sair = input("Deseja encerrar a votação? (s/n): ").lower()
-        if sair == "s":
+        sair = input("Deseja continuar no sistema? (s/n): ").lower()
+        if sair == "n":
             break
 
     elif opcao == 2:
@@ -103,7 +102,7 @@ while True:
                 cpf_eleitor = int(input("Digite o CPF do eleitor: "))
             except ValueError:
                 print("CPF inválido. Digite apenas números.")
-                continue
+
 
             if cpf_eleitor in eleitores:
                 print("CPF já cadastrado.")
@@ -111,10 +110,10 @@ while True:
                 nome_eleitor = input("Digite o nome do eleitor: ").strip().capitalize()
                 if not nome_eleitor:
                     print("Nome do eleitor não pode ser vazio.")
-                    continue
+
                 eleitores[cpf_eleitor] = nome_eleitor
                 print("Eleitor cadastrado com sucesso!")
-                salvar_dados() 
+                salvar_dados()
             
             continuar = input("Deseja cadastrar outro eleitor? (s/n): ").lower()
             if continuar == "n":
@@ -133,7 +132,7 @@ while True:
                     numero_cand = int(input("Digite o número do candidato: "))
                 except ValueError:
                     print("Número inválido. Digite apenas números.")
-                    continue
+
 
                 numero_ja_cadastrado = False
 
