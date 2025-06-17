@@ -70,19 +70,34 @@ while True:
             eleitores[nome_eleitor] = cpf_eleitor
             if input("Deseja cadastrar outro eleitor?(s/n): ") == "n":
                 break
-        for nome_eleitor, cpf in eleitores.items():
-            print (f"{nome_eleitor} - {cpf}")
-
+    
+    
     if opcao == 3:
         while True:
             print("Realizar Novo Cadastro de Candidato")
             nome_cand = input("Digite o nome do candidato: ")
-            numero_cand = int(input("Digite o numero do candidato: "))
+            
+            while True: 
+                numero_cand = int(input("Digite o número do candidato: "))
+                numero_ja_cadastrado = False
+
+                for info in candidatos.values():
+                     if info["numero"] == numero_cand:
+                       numero_ja_cadastrado = True
+                       break
+
+                if numero_ja_cadastrado:
+                   print("Esse número de eleitor pertence a outro candidato, tente novamente.")
+                else:
+                 break
+                
             candidatos[nome_cand] = {"numero": numero_cand, "votos": 0}
+
             if input("Deseja cadastrar outro Candidato?(s/n)") == "n":
                 break
         for nome_cand, info in candidatos.items():
             print(f"{nome_cand} - Número: {info['numero']}")
+         
 
     if opcao == 4:
         print("\nResultado da votação:")
