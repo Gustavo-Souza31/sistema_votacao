@@ -3,6 +3,7 @@ eleitores = {
     "Bruno": 22222222222,
     "Carla": 3333333333
 }
+#oi
 
 candidatos = {
     "Giovana": {"numero": 1608, "votos": 0},
